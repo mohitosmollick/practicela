@@ -19,7 +19,7 @@
                 @csrf
 
                 @if(session('messag'))
-                    <div class="alert alert-danger">{{session('messag')  }}</div>
+                    <div class="alert alert-{{session('type')}}">{{session('messag')  }}</div>
                     @endif
 
                 <div class="form-group">

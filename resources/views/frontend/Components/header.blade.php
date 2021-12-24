@@ -9,8 +9,14 @@
                 <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li>
+                @guest
                 <li class="nav-item"><a class="nav-link" href="{{route('user.register')}}">Registation</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{route('user.login')}}">Login</a></li>
+                @endguest
+                @auth
+                 <li class="nav-item"><a class="nav-link" href="{{route('user.logout')}}">LogOut</a></li>
+                @endauth
+
             </ul>
         </div>
     </div>

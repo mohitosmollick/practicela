@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Exception;
+
 
 class SiteController extends Controller
 {
@@ -22,15 +26,33 @@ class SiteController extends Controller
            "name" => "required| String",
             "email" => "required|email",
             "password" => "required|min:6|same:confirm_password",
-            "photo" => ["required", "image"],
+//            "photo" => ["required", "image"],
         ]);
 
-        $image = $request->file('photo');
-        $input = rand(11111, 99999).date('ymdhis.').$image->getClientOriginalExtension();
-        $path = public_path('/image');
-        $image->move($path, $input);
 
-        session()->flash('messag', 'Resistration success');
+//        $image = $request->file('photo');
+//
+//        if ($image->isValid()){
+//            $input = rand(11111, 99999).date('ymdhis.').$image->getClientOriginalExtension();
+//            $path = public_path('/image');
+//            $image->move($path, $input);
+//        }
+
+
+        try {
+            User::create([
+                'name'      => $request->name,
+                'email'     => $request->email,
+                'password'  => bcrypt($request->password)
+            ]);
+            session()->flash('type', 'success');
+            session()->flash('messag', 'Resistration success');
+
+        }catch (Exception $e){
+            session()->flash('type', 'danger');
+            session()->flash('messag', 'test');
+        }
+
         return redirect()->back();
 
     }
@@ -38,11 +60,23 @@ class SiteController extends Controller
         return view('frontend.Auth.login');
     }
     public function loginform(Request $request){
-        $request->validate([
+        $data = $request->validate([
             "email" => "required|email",
-            "password" => "required",
+            "password" => "required|min:6"
         ]);
 
+        if (auth()->attempt($data)){
+           return redirect('/');
+        }else{
+            session()->flash('type', 'danger');
+            session()->flash('messag','Password and Email does`t match');
+            return redirect()->back();
+        }
+
+    }
+    public function logout(){
+        \auth()->logout();
+        return redirect('/');
     }
 
 }

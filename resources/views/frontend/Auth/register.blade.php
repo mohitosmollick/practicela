@@ -18,8 +18,8 @@
             <form action="{{ route('user.registation') }} " method="POST" role="form" class=" p-4 dip" enctype="multipart/form-data">
                 @csrf
                 @if(session('messag'))
-                    <div class="alert alert-danger">{{session('messag')  }}</div>
-                    @endif
+                    <div class="alert alert-{{session('type')}}">{{session('messag')  }}</div>
+                @endif
 
                 <div class="form-group">
                     <label for="name">Name</label>
