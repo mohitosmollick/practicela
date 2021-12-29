@@ -66,7 +66,7 @@ class SiteController extends Controller
         ]);
 
         if (auth()->attempt($data)){
-           return redirect('/');
+           return redirect()->route('admin.dashboard');
         }else{
             session()->flash('type', 'danger');
             session()->flash('messag','Password and Email does`t match');
